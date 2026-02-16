@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  prodsec: snyk/prodsec-orb@1.0
+  prodsec: snyk/prodsec-orb@1
 
 defaults: &defaults
   docker:
@@ -41,6 +41,19 @@ jobs:
           name: Run tests
           command: npm t
 
+  security-scans:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Install deps
+          command: npm install
+      - prodsec/security_scans:
+          mode: gate-and-upload
+          open-source-additional-arguments: --exclude=test
+          iac-scan: disabled
+          release-branch: master
+
   release:
     <<: *defaults
     docker:
@@ -67,13 +80,22 @@ workflows:
             branches:
               ignore:
                 - master
+
       - build:
           name: Build
+
+      - security-scans:
+          name: Security Scans
+          context:
+            - open_source-managed
+#          requires:
+#            - Build
+
       - release:
           name: Release
           context: nodejs-lib-release
           requires:
-            - Build
+            - Security Scans
           filters:
             branches:
               only:
