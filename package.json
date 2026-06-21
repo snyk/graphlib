@@ -14,7 +14,7 @@
     "algorithms"
   ],
   "scripts": {
-    "prepare": "tsc",
+    "prepare": "tsc --build",
     "test": "jest",
     "lint": "eslint 'lib/**/*.?s' 'test/**/*test.?s'",
     "format": "prettier --write 'lib/**/*.?s' 'test/**/*.?s' '*.json' 'test/*.json' 'scripts/**/*.?s'"
