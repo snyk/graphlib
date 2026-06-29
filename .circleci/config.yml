@@ -8,6 +8,19 @@ defaults: &defaults
     - image: cimg/node:24.16
 
 jobs:
+  security-scans:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm install
+      - prodsec/security_scans:
+          mode: auto
+          open-source-additional-arguments: --exclude=test,scripts
+          iac-scan: disabled
+          release-branch: master
+
   tests:
     <<: *defaults
     steps:
@@ -48,6 +61,11 @@ workflows:
             branches:
               ignore:
                 - master
+
+      - security-scans:
+          name: Security Scans
+          context:
+            - open_source-managed
 
       - tests:
           name: Tests
