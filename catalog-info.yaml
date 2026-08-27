@@ -4,8 +4,8 @@ metadata:
   name: graphlib
   annotations:
     github.com/project-slug: snyk/graphlib
-    github.com/team-slug: snyk/os-managed
+    github.com/team-slug: snyk/engines_sca-scanners
 spec:
   type: external-library
   lifecycle: "-"
-  owner: os-managed
+  owner: engines_sca-scanners
